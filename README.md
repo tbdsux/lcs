@@ -3,6 +3,9 @@ Simple utility cli app for adding LICENSE to projects
 
 This project just adds a **LICENSE** file to your dir, nothing fancy.
 
+### Credits:
+All licenses are taken from **https://choosealicense.com**
+
 ## Install 
 ```
 nimble install https://github.com/TheBoringDude/lcs.git
