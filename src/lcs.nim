@@ -6,11 +6,11 @@ proc runMain() =
   var
     # variables that will be replaced to the license file
     licenseType: string
-    author: string      # [fullname]
-    year: string        # [year]
-    projectName: string # [project]
-    projectUrl: string  # [projecturl]
-                        # license contents
+    author: string = if getGitUsername() != "": getGitUsername() else: "" # [fullname]
+    year: string = $getSystemYear() # [year]
+    projectName: string             # [project]
+    projectUrl: string              # [projecturl]
+                                    # license contents
     license: string
 
   # parse cmd params

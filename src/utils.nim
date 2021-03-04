@@ -1,4 +1,4 @@
-import tables, strutils, strformat
+import tables, strutils, strformat, osproc, times
 
 const allLicenses = ["lgpl-2.1.txt", "gpl-3.0.txt", "mit-0.txt",
     "bsd-4-clause.txt", "cc0-1.0.txt", "ms-pl.txt", "gpl-2.0.txt",
@@ -18,3 +18,17 @@ proc iterateLicenses(): Table[string, string] =
 
 const licenses* = iterateLicenses()
 
+
+
+proc getGitUsername*(): string =
+  ## get github username
+
+  try:
+    var (output, _) = execCmdEx("git config user.name")
+    result = output.strip()
+  except Exception:
+    discard
+
+
+proc getSystemYear*(): int = now().year
+  ## get system year
