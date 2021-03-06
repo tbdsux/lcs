@@ -1,4 +1,5 @@
-import os, parseopt, tables, os, strutils, utils
+import std/[parseopt, tables, strutils]
+import utils
 
 proc runMain() =
   ## main function runner
@@ -6,15 +7,13 @@ proc runMain() =
   var
     # variables that will be replaced to the license file
     licenseType: string
-    author: string = if getGitUsername() != "": getGitUsername() else: "" # [fullname]
+    author: string = getGitUsername() # [fullname]
     year: string = $getSystemYear() # [year]
     projectName: string             # [project]
     projectUrl: string              # [projecturl]
-                                    # license contents
-    license: string
 
   # parse cmd params
-  for kind, key, val in getopt(commandLineParams()):
+  for kind, key, val in getopt():
     case kind
     of cmdArgument: continue
     of cmdEnd: break
@@ -29,18 +28,23 @@ proc runMain() =
   if licenseType == "":
     # exit cli if type is not set
     echo "License type flag required! (--type, -t)"
-    quit(0)
+    quit(1)
 
-  try:
-    license = licenses[licenseType]
-  except IndexDefect:
+  # Get license contents
+  var license = licenses.getOrDefault(licenseType, "")
+  # If there's no such license
+  if license == "":
     echo "Unknown license type: ", licenseType
-    quit(0)
+    quit(1)
 
 
   # replace license var contents
-  license = license.replace("[fullname]", author).replace("[year]",
-      year).replace("[project]", projectName).replace("[projecturl]", projectUrl)
+  license = license.multiReplace({
+    "[fullname]": author,
+    "[year]": year,
+    "[project]": projectName,
+    "[projecturl]": projectUrl
+  })
 
 
   # create LICENSE file
