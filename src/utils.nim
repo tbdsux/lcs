@@ -19,3 +19,6 @@ proc getGitUsername*(): string =
 
 proc getSystemYear*(): int = now().year
   ## get system year
+
+
+proc licenseExists*(): bool = fileExists("LICENSE")
