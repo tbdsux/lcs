@@ -47,12 +47,6 @@ proc runMain() =
   })
 
 
-  # `LICENSE` file exists already in dir
-  if licenseExists():
-    echo "`LICENSE` file already exists in project dir!"
-    quit(1)
-
-
   # create LICENSE file
   writeFile("LICENSE", license)
 
