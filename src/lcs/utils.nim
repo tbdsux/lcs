@@ -1,12 +1,21 @@
 import std/[os, tables, strutils, osproc, times]
 
-proc getLicenses: Table[string, string] = 
-  for kind, path in walkDir("src" / "licenses"):
+
+proc getPackagePath(): string = 
+  ## get the package folder dir
+  try:
+    var (output, _) = execCmdEx("nimble path lcs")
+    result = output.strip()
+  except:
+    discard
+
+
+proc getLicenses*(): Table[string, string] = 
+  for kind, path in walkDir(getPackagePath() / "lcs" / "licenses"):
     if kind == pcFile and path.endsWith(".txt"):
       let fname = path.splitFile().name
       result[fname] = readFile(path)
 
-const licenses* = getLicenses()
 
 proc getGitUsername*(): string =
   ## get github username
@@ -15,6 +24,7 @@ proc getGitUsername*(): string =
     result = output.strip()
   except:
     discard
+
 
 
 proc getSystemYear*(): int = now().year

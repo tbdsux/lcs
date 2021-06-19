@@ -1,8 +1,14 @@
 import std/[parseopt, tables, strutils]
-import utils
+import lcs/utils
+
+
+
 
 proc runMain() =
   ## main function runner
+  
+  # get all license
+  var licenses = getLicenses() 
 
   var
     # variables that will be replaced to the license file
@@ -19,16 +25,24 @@ proc runMain() =
     of cmdEnd: break
     of cmdLongOption, cmdShortOption:
       case key:
-      of "type", "t": licenseType = val
+      of "type", "t": licenseType = val.toLower()
       of "author", "a": author = val
       of "year", "y": year = val
       of "project", "p": projectName = val
       of "url", "u": projectUrl = val
+      of "show", "":
+        echo "\nList of Available Licenses:"
+        for key, _ in licenses:
+          echo "   - ", key
+
+        quit(0)
 
   if licenseType == "":
     # exit cli if type is not set
     echo "License type flag required! (--type, -t)"
     quit(1)
+
+  
 
   # Get license contents
   var license = licenses.getOrDefault(licenseType, "")
