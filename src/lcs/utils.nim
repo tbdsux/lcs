@@ -6,7 +6,7 @@ proc getPackagePath(): string =
   try:
     var (output, _) = execCmdEx("nimble path lcs")
     result = output.strip()
-  except:
+  except CatchableError:
     discard
 
 
@@ -22,7 +22,7 @@ proc getGitUsername*(): string =
   try:
     var (output, _) = execCmdEx("git config user.name")
     result = output.strip()
-  except:
+  except CatchableError:
     discard
 
 
